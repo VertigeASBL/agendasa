@@ -9,7 +9,9 @@
  * @package    SPIP\Agendasa\Pipelines
  */
 
-if (!defined('_ECRIRE_INC_VERSION')) return;
+if (!defined('_ECRIRE_INC_VERSION')) {
+	return;
+}
 
 function agendasa_affiche_milieu($flux) {
 	return $flux;
