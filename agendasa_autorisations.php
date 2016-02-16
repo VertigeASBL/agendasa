@@ -49,16 +49,6 @@ function autoriser_evenement_modifier($faire, $quoi, $id, $qui, $options) {
  * @param array $options
  * @return bool
  */
-function autoriser_evenement_instituer($faire,$quoi,$id,$qui,$options){
-	if (!isset($options['id_article']) OR !$id_article=$options['id_article'])
-		$id_article = sql_getfetsel('id_article','spip_evenements','id_evenement='.intval($id));
-	if (!$id_article) return false;
-	$statut = sql_getfetsel('statut','spip_articles','id_article='.intval($id_article));
-	// interdit de publier un evenement sur un article non publie
-	if ($statut!=='publie'
-	  AND isset($options['statut'])
-		AND $options['statut']=='publie')
-		return false;
-	$options['id_article']=$id_article;
-	return autoriser('modifier','evenement',$id,$qui,$options);
+function autoriser_evenement_instituer($faire, $quoi, $id, $qui, $options){
+	return autoriser('modifier', 'evenement', $id, $qui, $options);
 }
