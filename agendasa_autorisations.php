@@ -9,7 +9,9 @@
  * @package    SPIP\Agendasa\Autorisations
  */
 
-if (!defined('_ECRIRE_INC_VERSION')) return;
+if (!defined('_ECRIRE_INC_VERSION')) {
+    return;
+}
 
 
 /*
@@ -20,7 +22,7 @@ if (!defined('_ECRIRE_INC_VERSION')) return;
 /**
  * Fonction d'appel pour le pipeline
  * @pipeline autoriser */
-function agendasa_autoriser(){}
+function agendasa_autoriser() {}
 
 /**
  * Autorisation de modifier un evenement
