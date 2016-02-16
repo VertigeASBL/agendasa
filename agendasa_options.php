@@ -11,12 +11,11 @@
 
 if (!defined('_ECRIRE_INC_VERSION')) return;
 
+// Empecher le chargement du pipeline agenda_affiche_milieu
+$GLOBALS['spip_pipeline']['affiche_milieu'] = str_replace(
+	'|agenda_affiche_milieu',
+	'',
+	$GLOBALS['spip_pipeline']['affiche_milieu']
+);
 
-/*
- * Un fichier d'options permet de définir des éléments
- * systématiquement chargés à chaque hit sur SPIP.
- *
- * Il vaut donc mieux limiter au maximum son usage
- * tout comme son volume !
- * 
- */
+unset($GLOBALS['spip_matrice']['agenda_affiche_milieu']);

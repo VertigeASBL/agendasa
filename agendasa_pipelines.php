@@ -11,9 +11,6 @@
 
 if (!defined('_ECRIRE_INC_VERSION')) return;
 
-
-/*
- * Un fichier de pipelines permet de regrouper
- * les fonctions de branchement de votre plugin
- * sur des pipelines existants.
- */
+function agendasa_affiche_milieu($flux) {
+	return $flux;
+}
