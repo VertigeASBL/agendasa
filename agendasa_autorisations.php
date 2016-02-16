@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Définit les autorisations du plugin Agenda sans article
  *
@@ -43,6 +44,6 @@ function autoriser_evenement_modifier($faire, $quoi, $id, $qui, $options) {
  * @param array $options
  * @return bool
  */
-function autoriser_evenement_instituer($faire, $quoi, $id, $qui, $options){
+function autoriser_evenement_instituer($faire, $quoi, $id, $qui, $options) {
 	return autoriser('modifier', 'evenement', $id, $qui, $options);
 }
