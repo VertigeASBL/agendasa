@@ -13,12 +13,6 @@ if (!defined('_ECRIRE_INC_VERSION')) {
     return;
 }
 
-
-/*
- * Un fichier d'autorisations permet de regrouper
- * les fonctions d'autorisations de votre plugin
- */
-
 /**
  * Fonction d'appel pour le pipeline
  * @pipeline autoriser */
