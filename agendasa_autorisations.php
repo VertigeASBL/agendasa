@@ -23,7 +23,8 @@ if (!defined('_ECRIRE_INC_VERSION')) return;
 function agendasa_autoriser(){}
 
 /**
- * Autorisation de modifier un evenement : autorisations de l'article parent
+ * Autorisation de modifier un evenement
+ * Par défaut, seul les administrateurs on cette capacité
  *
  * @param string $faire
  * @param string $quoi
@@ -32,9 +33,6 @@ function agendasa_autoriser(){}
  * @param array $options
  * @return bool
  */
-function autoriser_evenement_modifier($faire,$quoi,$id,$qui,$options){
-	if (!isset($options['id_article']) OR !$id_article=$options['id_article'])
-		$id_article = sql_getfetsel('id_article','spip_evenements','id_evenement='.intval($id));
-	if (!$id_article) return false;
-	return autoriser('modifier','article',$id_article,$qui);
+function autoriser_evenement_modifier($faire, $quoi, $id, $qui, $options) {
+    return in_array($qui['statut'], array('0minirezo'));
 }
