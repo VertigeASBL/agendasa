@@ -22,15 +22,19 @@ if (!defined('_ECRIRE_INC_VERSION')) return;
  * @pipeline autoriser */
 function agendasa_autoriser(){}
 
-
-/* Exemple
-function autoriser_agendasa_configurer_dist($faire, $type, $id, $qui, $opt) {
-	// type est un objet (la plupart du temps) ou une chose.
-	// autoriser('configurer', '_agendasa') => $type = 'agendasa'
-	// au choix :
-	return autoriser('webmestre', $type, $id, $qui, $opt); // seulement les webmestres
-	return autoriser('configurer', '', $id, $qui, $opt); // seulement les administrateurs complets
-	return $qui['statut'] == '0minirezo'; // seulement les administrateurs (même les restreints)
-	// ...
+/**
+ * Autorisation de modifier un evenement : autorisations de l'article parent
+ *
+ * @param string $faire
+ * @param string $quoi
+ * @param int $id
+ * @param int $qui
+ * @param array $options
+ * @return bool
+ */
+function autoriser_evenement_modifier($faire,$quoi,$id,$qui,$options){
+	if (!isset($options['id_article']) OR !$id_article=$options['id_article'])
+		$id_article = sql_getfetsel('id_article','spip_evenements','id_evenement='.intval($id));
+	if (!$id_article) return false;
+	return autoriser('modifier','article',$id_article,$qui);
 }
-*/
