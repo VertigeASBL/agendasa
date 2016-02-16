@@ -24,8 +24,7 @@ function action_editer_evenement_dist($arg=null){
 	// si id_evenement n'est pas un nombre, c'est une creation
 	// mais on verifie qu'on a toutes les donnees qu'il faut.
 	if (!$id_evenement = intval($arg)) {
-		$id_parent = _request('id_parent');
-		if (!$id_evenement = agenda_action_insert_evenement($id_parent))
+		if (!$id_evenement = agenda_action_insert_evenement())
 			return array(false,_L('echec'));
 	}
 
@@ -40,17 +39,12 @@ function action_editer_evenement_dist($arg=null){
  * @param int $id_evenement_source
  * @return int
  */
-function evenement_inserer($id_article,$id_evenement_source = 0){
+function evenement_inserer($id_evenement_source = 0){
 	include_spip('inc/autoriser');
-	if (!autoriser('creerevenementdans','article',$id_article)){
-		spip_log("agenda action formulaire article : auteur ".$GLOBALS['visiteur_session']['id_auteur']." n'a pas le droit de creer un evenement dans article $id_article",'agenda');
-		return false;
-	}
 
 	$champs = array(
 		"id_evenement_source"=>intval($id_evenement_source),
-		'id_article'=>intval($id_article),
-		'statut' => 'prop',
+		'statut' => 'prop'
 	);
 
 	// Envoyer aux plugins
@@ -244,48 +238,10 @@ function evenement_instituer($id_evenement, $c) {
 	include_spip('inc/autoriser');
 	include_spip('inc/modifier');
 
-	$row = sql_fetsel("id_article, statut", "spip_evenements", "id_evenement=".intval($id_evenement));
-	$id_parent  = $id_parent_ancien = $row['id_article'];
+	$row = sql_fetsel("statut", "spip_evenements", "id_evenement=".intval($id_evenement));
 	$statut = $statut_ancien = $row['statut'];
 
 	$champs = array();
-
-	if (!autoriser('modifier', 'article', $id_parent)
-	  OR (isset($c['id_parent']) AND !autoriser('modifier', 'article', $c['id_parent']))){
-		spip_log("editer_evenement $id_evenement refus " . join(' ', $c));
-		return false;
-	}
-
-	// Verifier que l'article demande existe et est different
-	// de l'article actuel
-	if ($c['id_parent']
-	  AND $c['id_parent'] != $id_parent
-	  AND (sql_countsel("spip_articles", "id_article=".intval($c['id_parent'])))) {
-		$id_parent = $champs['id_article'] = $c['id_parent'];
-	}
-
-	$sa = sql_getfetsel('statut','spip_articles','id_article='.intval($id_parent));
-	if ($id_parent
-	  AND (
-			$id_parent!==$id_parent_ancien OR $statut=='0'
-		)){
-		switch($sa){
-			case 'publie':
-				// statut par defaut si besoin
-				if ($statut=='0')
-					$champs['statut'] = $statut = 'publie';
-				break;
-			case 'poubelle':
-				// si article a la poubelle, evenement aussi
-				$champs['statut'] = $statut = 'poubelle';
-				break;
-			default:
-				// pas de publie ni 0 si article pas publie
-				if (in_array($statut,array('publie','0')))
-					$champs['statut'] = $statut = 'prop';
-				break;
-		}
-	}
 
 	// si pas d'article lie, et statut par defaut
 	// on met en propose
@@ -295,12 +251,7 @@ function evenement_instituer($id_evenement, $c) {
 	if (isset($c['statut'])
 		AND $s = $c['statut']
 		AND $s != $statut) {
-		// pour instituer un evenement il faut avoir le droit d'instituer l'article associe avec le meme statut
-		if (autoriser('instituer', 'article', $id_parent, null, array('statut'=>$s))
-		  AND ($sa=='publie' OR $s!=='publie'))
-			$champs['statut'] = $statut = $s;
-		else
-			spip_log("editer_evenement $id_evenement refus " . join(' ', $c));
+		$champs['statut'] = $statut = $s;
 	}
 
 	// Envoyer aux plugins
@@ -324,11 +275,6 @@ function evenement_instituer($id_evenement, $c) {
 	$ids[] = intval($id_evenement);
 	sql_updateq('spip_evenements', $champs, sql_in('id_evenement', $ids));
 
-	// Invalider les caches
-	include_spip('inc/invalideur');
-	suivre_invalideur("id='id_article/$id_parent_ancien'");
-	suivre_invalideur("id='id_article/$id_parent'");
-
 	// Pipeline
 	pipeline('post_edition',
 		array(
@@ -346,7 +292,7 @@ function evenement_instituer($id_evenement, $c) {
 	// Notifications
 	if ($notifications = charger_fonction('notifications', 'inc')) {
 		$notifications('instituerevenement', $id_evenement,
-			array('id_parent' => $id_parent, 'statut' => $statut, 'id_parent_ancien' => $id_parent, 'statut_ancien' => $statut_ancien)
+			array('statut' => $statut, 'statut_ancien' => $statut_ancien)
 		);
 	}
 
@@ -378,7 +324,7 @@ function agenda_action_supprime_evenement($id_article,$supp_evenement){
 }*/
 
 
-function agenda_action_insert_evenement($id_article,$id_evenement_source = 0){return evenement_inserer($id_article,$id_evenement_source);}
+function agenda_action_insert_evenement($id_evenement_source = 0){return evenement_inserer($id_evenement_source);}
 function action_evenement_set($id_evenement, $set=null){return evenement_modifier($id_evenement, $set);}
 function agenda_action_instituer_evenement($id_evenement, $c) {return evenement_instituer($id_evenement,$c);}
 ?>
