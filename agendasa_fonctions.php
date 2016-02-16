@@ -54,7 +54,5 @@ function formulaires_editer_evenement_verifier(
         }
     }
 
-	#if (!count($erreurs))
-	#	$erreurs['message_erreur'] = 'ok?';
 	return $erreurs;
 }
