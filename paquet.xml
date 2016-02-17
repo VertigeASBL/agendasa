@@ -42,7 +42,8 @@
 
 
 	<pipeline nom="autoriser" inclure="agendasa_autorisations.php" />
-	<pipeline nom="afficher_milieu" inclure="agendasa_autorisations.php" />
+	<pipeline nom="header_prive" inclure="agendasa_pipelines.php" />
+
 	<necessite nom="agenda" compatibilite="[3.14.13;]" />
 
 
