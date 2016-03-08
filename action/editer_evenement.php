@@ -46,7 +46,7 @@ function evenement_inserer($id_evenement_source = 0) {
 
     $champs = array(
 		'id_evenement_source'=>intval($id_evenement_source),
-		'id_article'=>47,
+		'id_article'=>_ID_ARTICLE_AGENDA,
 		'statut' => 'prop'
 	);
 
