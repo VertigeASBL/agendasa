@@ -10,11 +10,6 @@
 	Bouton voir en ligne
 
 ]
-<BOUCLE_has(ARTICLES){id_article}{statut==.*}>
-	<ul class="liste-items articles">
-		<li class="item"><a href="[(#ID_ARTICLE|generer_url_entite{article})]">#TITRE</a></li>
-	</ul>
-</BOUCLE_has>
 
 <BOUCLE_epublie(EVENEMENTS){id_evenement}>
 	[(#VAL{redirect}
